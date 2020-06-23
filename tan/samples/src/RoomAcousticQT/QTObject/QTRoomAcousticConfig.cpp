@@ -114,9 +114,12 @@ RoomAcousticQTConfig::~RoomAcousticQTConfig()
 
 }
 
-void RoomAcousticQTConfig::Init()
+void RoomAcousticQTConfig::Init(std::string configFile, std::string outputFile, std::string metricsFile)
 {
 	m_RoomAcousticGraphic->clear();
+	m_RoomAcousticInstance.mConfigFileName = configFile;
+	m_RoomAcousticInstance.mOutputFileName = outputFile;
+	m_RoomAcousticInstance.mMetricsFileName = metricsFile;
 	m_RoomAcousticInstance.loadConfiguration(m_RoomAcousticInstance.mConfigFileName);
 
 	updateAllFields();

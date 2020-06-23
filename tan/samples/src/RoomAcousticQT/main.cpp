@@ -24,18 +24,44 @@
 
 #include "QTRoomAcousticConfig.h"
 #include <QtWidgets/QApplication>
+#include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
-
 	QApplication application(argc, argv);
-	Q_INIT_RESOURCE(roomaccousticnew);
-
+	QCommandLineParser parser;
+	parser.addHelpOption();
+	QCommandLineOption configFile("configFile", QCoreApplication::translate("main", "Initialize config with <File>"),
+		QCoreApplication::translate("main", "File"));
+	QCommandLineOption outputFile("outputFile", QCoreApplication::translate("main", "Save simulation into <File>"),
+		QCoreApplication::translate("main", "File"));
+	QCommandLineOption metricsFile("metricsFile", QCoreApplication::translate("main", "Save all gathered metrics into <File>"),
+		QCoreApplication::translate("main", "File"));
+	parser.addOption(configFile);
+	parser.addOption(outputFile);
+	parser.addOption(metricsFile);
 	application.setWindowIcon(QIcon(":/images/Resources/RoomAcousticsNew.png"));
-
+	std::cout << "Log started" << std::endl;
+	parser.process(application);
+	std::cout
+		<< "Benchmarking mode initiated:" << std::endl
+		<< "Config file: " << parser.value(configFile).toStdString() << std::endl
+		<< "Output file: " << parser.value(outputFile).toStdString() << std::endl
+		<< "Metrics file: " << parser.value(metricsFile).toStdString() << std::endl;
+	Q_INIT_RESOURCE(roomaccousticnew);
+	/*if (parser.cmdOptionExists("-t")) {
+		std::string configFile = parser.getCmdOption("-configFile");
+		std::string outputFile = parser.getCmdOption("-outputFile");
+		std::string metricsFile = parser.getCmdOption("-metricsFile");
+		std::cout
+			<< "Benchmarking mode initiated:" << std::endl
+			<< "Config file:" << configFile << std::endl
+			<< "Output file:" << outputFile << std::endl
+			<< "Metrics file:" << metricsFile << std::endl;
+	}*/
 	RoomAcousticQTConfig configWindow;
-	configWindow.Init();
+	configWindow.Init(parser.value(configFile).toStdString(), parser.value(outputFile).toStdString(), parser.value(metricsFile).toStdString());
 
 	return application.exec();
 }

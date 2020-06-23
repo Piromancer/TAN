@@ -46,6 +46,7 @@
 #include <QStandardPaths>
 #include <QSettings>
 
+
 RoomAcousticQT::RoomAcousticQT()
 {
 	initialize();
@@ -159,7 +160,7 @@ void RoomAcousticQT::initializeEnvironment()
 	auto homeLocation = locations.size() ? locations[0].toStdString() : path2Exe;
 
 	mTANDLLPath = path2Exe;
-	mConfigFileName = joinPaths(homeLocation, std::string(".") + commandName + "-default.xml");
+	//mConfigFileName = joinPaths(homeLocation, std::string(".") + commandName + "-default.xml");
 	mLogPath = joinPaths(homeLocation, std::string(".") + commandName + ".log");
 
 	setCurrentDirectory(mTANDLLPath);
@@ -189,7 +190,6 @@ void RoomAcousticQT::initializeEnvironment()
 	GetFileVersionAndDate(logDateVerStamp, version);
 	wprintf(logDateVerStamp);
 	*/
-	std::cout << "Log started" << std::endl;
 
 	for (int idx = 0; idx < MAX_SOURCES; idx++)
 	{
@@ -412,6 +412,7 @@ void RoomAcousticQT::enumDevices()
 void RoomAcousticQT::loadConfiguration(const std::string& xmlfilename)
 {
 	initializeEnvironment();
+	std::cout << "Loading config from " << xmlfilename << std::endl;
 
 	// Creating internal structre and prepare for xml loading
 	// attribute src1PosAttribs[3] = { { "X", &m_SoundSources->speakerX, 'f' }, { "Y", &srcY[0], 'f' }, { "Z", &srcZ[0], 'f' } };
