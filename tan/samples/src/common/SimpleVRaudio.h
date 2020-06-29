@@ -104,7 +104,8 @@ public:
         amf::TAN_CONVOLUTION_METHOD
                                 convMethod,
 
-        const std::string &     playerType
+        const std::string &     playerType,
+        std::string             outputFile
         );
 
 	// finalize, deallocate resources, close files, etc.
@@ -119,13 +120,14 @@ public:
 protected:
     static bool useIntrinsics;
     static const int IR_UPDATE_MODE = 1; // 0: Non-Blocking 1: Blocking
-    static unsigned processThreadProc(void *ptr);
+    static unsigned processThreadProc(void* ptr);
     static unsigned updateThreadProc(void *ptr);
 
     PrioritizedThread mProcessThread;
     PrioritizedThread mUpdateThread;
 
     int ProcessProc();
+
     int UpdateProc();
     int Process(int16_t * pOut, int16_t * pChan[MAX_SOURCES], uint32_t sampleCount);
 
@@ -134,6 +136,8 @@ protected:
     bool mStop = false;
     bool mUpdateParams = true;
     bool m_useOCLOutputPipeline;
+
+    std::string outFile;
 
     std::unique_ptr<IWavPlayer> mPlayer; //todo: dynamic creation of choosen player
 	std::vector<WavContent>     mWavFiles;

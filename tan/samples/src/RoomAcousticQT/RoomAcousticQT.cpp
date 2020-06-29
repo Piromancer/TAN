@@ -127,9 +127,9 @@ bool RoomAcousticQT::start()
 
 		m_eConvolutionMethod,
 
-		mPlayerName
+		mPlayerName,
+		mOutputFileName
 		);
-
 	if(started)
 	{
 		m_pAudioEngine->setWorldToRoomCoordTransform(0., 0., 0., 0., 0., true);
@@ -412,7 +412,6 @@ void RoomAcousticQT::enumDevices()
 void RoomAcousticQT::loadConfiguration(const std::string& xmlfilename)
 {
 	initializeEnvironment();
-	std::cout << "Loading config from " << xmlfilename << std::endl;
 
 	// Creating internal structre and prepare for xml loading
 	// attribute src1PosAttribs[3] = { { "X", &m_SoundSources->speakerX, 'f' }, { "Y", &srcY[0], 'f' }, { "Z", &srcZ[0], 'f' } };
