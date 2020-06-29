@@ -1296,6 +1296,8 @@ int Audio3D::ProcessProc()
             else
             {
                 //play wav again
+                if(!outFile.empty())
+                    mStop = true;
                 pWaves[fileIndex] = pWaveStarts[fileIndex];
                 waveBytesPlayed[fileIndex] = 0;
             }
@@ -1333,11 +1335,11 @@ int Audio3D::ProcessProc()
         &mStereoProcessedBuffer.front()
         ))
     {
-        puts("unable to write RoomAcousticsRun.wav");
+        puts("unable to write to specified file");
     }
     else
     {
-        puts("wrote output to RoomAcousticsRun.wav");
+        puts("wrote output to specified file");
     }
 
     mRunning = false;

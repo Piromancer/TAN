@@ -122,6 +122,9 @@ void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std
 		m_RoomAcousticInstance.mOutputFileName = outputFile;
 		m_RoomAcousticInstance.mMetricsFileName = metricsFile;
 	}
+	else {
+		m_RoomAcousticInstance.mOutputFileName = "";
+	}
 	m_RoomAcousticInstance.loadConfiguration(m_RoomAcousticInstance.mConfigFileName);
 
 	updateAllFields();

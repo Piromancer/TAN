@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 			<< "Metrics file: " << parser.value(metricsFile).toStdString() << std::endl;
 		configWindow.Init(true, parser.value(configFile).toStdString(), parser.value(outputFile).toStdString(), parser.value(metricsFile).toStdString());
 	} else
-		configWindow.Init(false, NULL, NULL, NULL);
+		configWindow.Init(false, "", "", "");
 
 	return application.exec();
 }
