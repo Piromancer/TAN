@@ -31,6 +31,7 @@
 #endif
 #include "cpucaps.h"
 #include "TrueAudioVR.h"
+#include <chrono>
 
 #include <immintrin.h>
 
@@ -659,6 +660,7 @@ each of the six walls, source and microphone positions in the room.
 void TrueAudioVRimpl::generateRoomResponse(RoomDefinition room, MonoSource sound, StereoListener ears,
     int inSampRate, int responseLength, void *responseL, void *responseR, int flags, int maxBounces)
 {
+	auto t1 = std::chrono::high_resolution_clock::now();
 
     if (sound.speakerX > room.width) sound.speakerX = room.width;
     if (sound.speakerX < 0) sound.speakerX = 0;
@@ -771,6 +773,9 @@ void TrueAudioVRimpl::generateRoomResponse(RoomDefinition room, MonoSource sound
         }
     }
 
+	auto t2 = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+	std::cout << std::endl << std::endl << "Room response calculation duration: " << duration << std::endl << std::endl;
     //printf(".");
     return;
 
@@ -1056,6 +1061,7 @@ void TrueAudioVRimpl::generateRoomResponseGPU(
     int nH,
     int nL)
 {
+	auto t1 = std::chrono::high_resolution_clock::now();
     //Set kernel arguments
     //TODO: pass parameters as structures
     int argIdx = 0;
@@ -1145,6 +1151,7 @@ void TrueAudioVRimpl::generateRoomResponseGPU(
     int nH,
     int nL)
 {
+	auto t1 = std::chrono::high_resolution_clock::now();
     int status = 0;
     generateRoomResponseGPU(sound, room, m_pFloatResponse,
         headX,headY,headZ,
@@ -1161,6 +1168,9 @@ void TrueAudioVRimpl::generateRoomResponseGPU(
     //hack ..
     //void *frMap = clEnqueueMapBuffer(m_cmdQueue, m_pFloatResponse, CL_TRUE, CL_MAP_READ, 0, responseLength * sizeof(float),0, NULL, NULL, &status);
 
+	auto t2 = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+	std::cout << std::endl << std::endl << "Room response calculation duration: " << duration << std::endl << std::endl;
     if (status != CL_SUCCESS)
     {
         return;

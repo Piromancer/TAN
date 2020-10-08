@@ -84,7 +84,8 @@ private slots:
 public:
 	RoomAcousticQTConfig(QWidget *parent = 0);
 	~RoomAcousticQTConfig();
-	void Init();
+	void Init(boolean consoleMode, std::string configFile, std::string outputFile, std::string metricsFile);
+	void run_in_console();
 
 private:
 	void initSoundSourceGraphic();								// Initialize the soundsource graphcis(icon)

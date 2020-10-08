@@ -107,10 +107,9 @@ public:
         int                     cuRes_IRGen,
 //#endif
 
-        amf::TAN_CONVOLUTION_METHOD
-                                convMethod,
-
-        const std::string &     playerType
+        amf::TAN_CONVOLUTION_METHOD convMethod,
+		const std::string &     playerType,
+		const std::string &     mOutputFileName
         );
 
 	// finalize, deallocate resources, close files, etc.

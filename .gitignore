@@ -10,6 +10,11 @@ True Audio Next SDK Build Instructions.docx
 /tan/build/cmake/mac-gnumake
 /tan/build/cmake/vs2015
 /tan/build/cmake/vs2017
+/tan/tanlibrary/src/fftw-3.3.5-dll64
 /thirdparty/portaudio/*
 /thirdparty/OpenCL-Headers/*
+/thirdparty/asiosdk/*
+/thirdparty/OculusSDK/*
+/thirdparty/asiosdk/*
 .DS_Store
+thirdparty

@@ -31,6 +31,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <CL/cl.h>
+#include <chrono>
 
 #if defined(_WIN32)
     #include "../common/WASAPIPlayer.h"
@@ -347,7 +348,8 @@ int Audio3D::Init
 	amf::TAN_CONVOLUTION_METHOD
 	convMethod,
 
-	const std::string &     playerType
+	const std::string &     playerType,
+	const std::string &     mOutputFile
 )
 {
 
@@ -1058,6 +1060,7 @@ bool Audio3D::Stop()
 
 int Audio3D::Process(int16_t *pOut, int16_t *pChan[MAX_SOURCES], uint32_t sampleCountBytes)
 {
+	auto t1 = std::chrono::high_resolution_clock::now();
     uint32_t sampleCount = sampleCountBytes / (sizeof(int16_t) * STEREO_CHANNELS_COUNT);
 
     // Read from the files
@@ -1198,6 +1201,9 @@ int Audio3D::Process(int16_t *pOut, int16_t *pChan[MAX_SOURCES], uint32_t sample
     ret = m_spConverter->Convert(outputFloatBufs[1], 1, sampleCount, pOut + 1, 2, 1.f);
     RETURN_IF_FALSE(ret == AMF_OK || ret == AMF_TAN_CLIPPING_WAS_REQUIRED);
 #endif
+	auto t2 = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+	//std::cout << std::endl << std::endl << "Convolution proc duration: " << duration << std::endl << std::endl;
     return 0;
 }
 
@@ -1335,6 +1341,7 @@ int Audio3D::ProcessNextBlock(int16_t ** pOut, int16_t **pRec, uint32_t sampleCo
 
 int Audio3D::ProcessProc()
 {
+	auto t1 = std::chrono::high_resolution_clock::now();
     //uint32_t bytesRecorded(0);
 
     std::array<uint8_t, STEREO_CHANNELS_COUNT * FILTER_SAMPLE_RATE * sizeof(int16_t)> recordBuffer;
@@ -1631,6 +1638,10 @@ int Audio3D::ProcessProc()
 
     mRunning = false;
 
+	auto t2 = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+	//std::cout << std::endl << std::endl << "Convolution duration: " << duration << std::endl << std::endl;
+
     return 0;
 }
 
@@ -1699,11 +1710,19 @@ int Audio3D::UpdateProc()
         {
             if(mUseClMemBufs)
             {
+				auto t1 = std::chrono::high_resolution_clock::now();
                 ret = m_spConvolution->UpdateResponseTD(mOCLResponses, m_fftLen, nullptr, IR_UPDATE_MODE);
+				auto t2 = std::chrono::high_resolution_clock::now();
+				auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+				std::cout << std::endl << std::endl << "Room response calculation duration: " << duration << std::endl << std::endl;
             }
             else
             {
+				auto t1 = std::chrono::high_resolution_clock::now();
                 ret = m_spConvolution->UpdateResponseTD(mResponses, m_fftLen, nullptr, IR_UPDATE_MODE);
+				auto t2 = std::chrono::high_resolution_clock::now();
+				auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+				std::cout << std::endl << std::endl << "UpdateResponseTD duration: " << duration << std::endl << std::endl;
             }
 
             if(ret != AMF_INPUT_FULL)
