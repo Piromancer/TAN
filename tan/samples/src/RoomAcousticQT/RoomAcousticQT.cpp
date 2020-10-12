@@ -34,6 +34,8 @@
 #include <cstring>
 #include <cassert>
 #include <chrono>
+#include <iostream>
+#include <fstream>
 
 #ifdef _WIN32
 #include <io.h>
@@ -128,12 +130,17 @@ bool RoomAcousticQT::start()
 
 		m_eConvolutionMethod,
 
-		mPlayerName,
-		mOutputFileName
+		mPlayerName
 		);
 	auto t2 = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-	std::cout << std::endl << std::endl << "Initialization duration: " << duration << std::endl << std::endl;
+	std::cout << std::endl << std::endl << "Initialization duration: " << duration << std::endl << std::endl; 
+	if (mMetricsFileName != "") {
+		std::ofstream myfile;
+		myfile.open(mMetricsFileName);
+		myfile << "Initializtion: " << duration << std::endl;
+		myfile.close();
+	}
 
 	if(started)
 	{

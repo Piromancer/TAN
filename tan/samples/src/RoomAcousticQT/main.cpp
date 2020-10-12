@@ -41,23 +41,19 @@ int main(int argc, char *argv[])
 	if (application.arguments().count() >= 2) {
 		QCommandLineOption configFile("configFile", QCoreApplication::translate("main", "Initialize config with <File>"),
 			QCoreApplication::translate("main", "File"));
-		QCommandLineOption outputFile("outputFile", QCoreApplication::translate("main", "Save simulation into <File>"),
-			QCoreApplication::translate("main", "File"));
 		QCommandLineOption metricsFile("metricsFile", QCoreApplication::translate("main", "Save all gathered metrics into <File>"),
 			QCoreApplication::translate("main", "File"));
 		parser.addOption(configFile);
-		parser.addOption(outputFile);
 		parser.addOption(metricsFile);
 		parser.process(application);
 		std::cout
 			<< "Benchmarking mode initiated:" << std::endl
 			<< "Config file: " << parser.value(configFile).toStdString() << std::endl
-			<< "Output file: " << parser.value(outputFile).toStdString() << std::endl
 			<< "Metrics file: " << parser.value(metricsFile).toStdString() << std::endl;
-		configWindow.Init(true, parser.value(configFile).toStdString(), parser.value(outputFile).toStdString(), parser.value(metricsFile).toStdString());
+		configWindow.Init(true, parser.value(configFile).toStdString(), parser.value(metricsFile).toStdString());
 }
 	else
-		configWindow.Init(false, "", "", "");
+		configWindow.Init(false, "", "");
 
 
 #ifdef USE_ASIO

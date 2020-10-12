@@ -348,8 +348,7 @@ int Audio3D::Init
 	amf::TAN_CONVOLUTION_METHOD
 	convMethod,
 
-	const std::string &     playerType,
-	const std::string &     mOutputFile
+	const std::string &     playerType
 )
 {
 

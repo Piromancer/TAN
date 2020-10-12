@@ -223,16 +223,15 @@ RoomAcousticQTConfig::~RoomAcousticQTConfig()
 #endif
 }
 
-void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std::string outputFile, std::string metricsFile)
+void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std::string metricsFile)
 {
 	m_RoomAcousticGraphic->clear();
 	if (consoleMode) {
 		m_RoomAcousticInstance.mConfigFileName = configFile;
-		m_RoomAcousticInstance.mOutputFileName = outputFile;
 		m_RoomAcousticInstance.mMetricsFileName = metricsFile;
 	}
 	else {
-		m_RoomAcousticInstance.mOutputFileName = "RoomAcousticsRun.wav";
+		m_RoomAcousticInstance.mMetricsFileName = "";
 	}
 	m_RoomAcousticInstance.loadConfiguration(m_RoomAcousticInstance.mConfigFileName);
 
@@ -245,10 +244,10 @@ void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std
 	updateAllSoundSourceGraphics();
 	updateListnerGraphics();
 
-	show();
-	if (consoleMode) {
+	if (consoleMode)
 		run_in_console();
-	}
+	else
+		show();
 }
 
 void RoomAcousticQTConfig::run_in_console() {

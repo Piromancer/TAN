@@ -108,8 +108,7 @@ public:
 //#endif
 
         amf::TAN_CONVOLUTION_METHOD convMethod,
-		const std::string &     playerType,
-		const std::string &     mOutputFileName
+		const std::string &     playerType
         );
 
 	// finalize, deallocate resources, close files, etc.
