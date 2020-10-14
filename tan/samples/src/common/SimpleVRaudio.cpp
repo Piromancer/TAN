@@ -348,9 +348,11 @@ int Audio3D::Init
 	amf::TAN_CONVOLUTION_METHOD
 	convMethod,
 
+	const std::string       outputFile,
 	const std::string &     playerType
 )
 {
+	moutputFile = outputFile;
 
 	if (useGPU_ConvQueue && !useGPU_Conv)
 	{
@@ -1619,7 +1621,7 @@ int Audio3D::ProcessProc()
 
     
     if(!WriteWaveFileS(
-        "RoomAcousticsRun.wav",
+        moutputFile.c_str(),
         FILTER_SAMPLE_RATE,
         2,
         16,

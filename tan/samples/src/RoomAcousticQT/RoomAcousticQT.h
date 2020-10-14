@@ -134,6 +134,7 @@ public:
 	std::string mLogPath;
 	std::string mConfigFileName;
 	std::string mMetricsFileName;
+	std::string mOutputFileName;
 
 	std::string mWavFileNames[MAX_SOURCES];
 	char*  m_cpWavFileNames[MAX_SOURCES];

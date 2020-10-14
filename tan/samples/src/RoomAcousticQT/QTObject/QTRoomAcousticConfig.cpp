@@ -223,9 +223,10 @@ RoomAcousticQTConfig::~RoomAcousticQTConfig()
 #endif
 }
 
-void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std::string metricsFile)
+void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std::string metricsFile, std::string outputFile)
 {
 	m_RoomAcousticGraphic->clear();
+	m_RoomAcousticInstance.mOutputFileName = outputFile;
 	if (consoleMode) {
 		m_RoomAcousticInstance.mConfigFileName = configFile;
 		m_RoomAcousticInstance.mMetricsFileName = metricsFile;

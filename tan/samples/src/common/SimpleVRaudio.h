@@ -107,7 +107,8 @@ public:
         int                     cuRes_IRGen,
 //#endif
 
-        amf::TAN_CONVOLUTION_METHOD convMethod,
+		amf::TAN_CONVOLUTION_METHOD convMethod,
+		std::string outputFile,
 		const std::string &     playerType
         );
 
@@ -140,7 +141,7 @@ protected:
     bool mUpdated = false;
     bool mStop = false;
     bool mUpdateParams = true;
-    bool m_useOCLOutputPipeline;
+	bool m_useOCLOutputPipeline;
 
 	int16_t *pWaves[MAX_SOURCES] = { nullptr };
 	int16_t *pWaveStarts[MAX_SOURCES] = { nullptr };
@@ -156,6 +157,7 @@ protected:
 
 #endif
 
+	std::string      moutputFile;
 	std::string      mplayerType;
     std::unique_ptr<IWavPlayer> mPlayer; //todo: dynamic creation of choosen player
 	std::vector<WavContent>     mWavFiles;
