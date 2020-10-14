@@ -36,12 +36,17 @@
 
 #include <iostream>
 #include <cstring>
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #ifdef USE_ASIO
 #include "asiosys.h"
 #include "asio.h"
 #include "asiodrivers.h" 
 #endif
-
 
 #ifdef USE_ASIO
 #define MAX_DRIVERS 10L
@@ -222,9 +227,17 @@ RoomAcousticQTConfig::~RoomAcousticQTConfig()
 #endif
 }
 
-void RoomAcousticQTConfig::Init()
+void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std::string metricsFile, std::string outputFile, int playDuration)
 {
 	m_RoomAcousticGraphic->clear();
+	m_RoomAcousticInstance.mOutputFileName = outputFile;
+	if (consoleMode) {
+		m_RoomAcousticInstance.mConfigFileName = configFile;
+		m_RoomAcousticInstance.mMetricsFileName = metricsFile;
+	}
+	else {
+		m_RoomAcousticInstance.mMetricsFileName = "";
+	}
 	m_RoomAcousticInstance.loadConfiguration(m_RoomAcousticInstance.mConfigFileName);
 
 	updateAllFields();
@@ -236,7 +249,22 @@ void RoomAcousticQTConfig::Init()
 	updateAllSoundSourceGraphics();
 	updateListnerGraphics();
 
-	show();
+	if (consoleMode)
+		run_in_console(playDuration);
+	else
+		show();
+}
+
+void RoomAcousticQTConfig::run_in_console(int playDuration) {
+	on_PB_RunDemo_clicked();
+#ifdef _WIN32
+	Sleep(playDuration * 1000);
+#else
+	usleep(playDuration * 1000);
+#endif
+	on_PB_RunDemo_clicked();
+	close();
+	std::exit(0);
 }
 
 void RoomAcousticQTConfig::storeSelectedSoundSource()

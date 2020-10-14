@@ -109,7 +109,7 @@ public:
 
         amf::TAN_CONVOLUTION_METHOD
                                 convMethod,
-
+		std::string outputFile,
         const std::string &     playerType
         );
 
@@ -158,6 +158,7 @@ protected:
 
 #endif
 
+	std::string      moutputFile;
 	std::string      mplayerType;
     std::unique_ptr<IWavPlayer> mPlayer; //todo: dynamic creation of choosen player
 	std::vector<WavContent>     mWavFiles;

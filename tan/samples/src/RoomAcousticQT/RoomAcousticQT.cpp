@@ -33,6 +33,9 @@
 #include <vector>
 #include <cstring>
 #include <cassert>
+#include <chrono>
+#include <iostream>
+#include <fstream>
 
 #ifdef _WIN32
 #include <io.h>
@@ -92,6 +95,7 @@ bool RoomAcousticQT::start()
 		}
 	}
 
+	auto t1 = std::chrono::high_resolution_clock::now();
 	bool started = m_pAudioEngine->Init(
 		mTANDLLPath,
 		m_RoomDefinition,
@@ -126,8 +130,18 @@ bool RoomAcousticQT::start()
 
 		m_eConvolutionMethod,
 
+		mOutputFileName,
 		mPlayerName
 		);
+	auto t2 = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+	std::cout << std::endl << std::endl << "Initialization duration: " << duration << std::endl << std::endl; 
+	if (mMetricsFileName != "") {
+		std::ofstream myfile;
+		myfile.open(mMetricsFileName);
+		myfile << "Initializtion: " << duration << std::endl;
+		myfile.close();
+	}
 
 	if(started)
 	{
@@ -159,7 +173,7 @@ void RoomAcousticQT::initializeEnvironment()
 	auto homeLocation = locations.size() ? locations[0].toStdString() : path2Exe;
 
 	mTANDLLPath = path2Exe;
-	mConfigFileName = joinPaths(homeLocation, std::string(".") + commandName + "-default.xml");
+	//mConfigFileName = joinPaths(homeLocation, std::string(".") + commandName + "-default.xml");
 	mLogPath = joinPaths(homeLocation, std::string(".") + commandName + ".log");
 
 	setCurrentDirectory(mTANDLLPath);
@@ -169,7 +183,6 @@ void RoomAcousticQT::initializeEnvironment()
 	FILE *fpLog = NULL;
 	errno_t err = 0;
 	errno = 0;
-
 	// Redirect stdout and stderr to a log file.
 	if (fopen_s(&fpLog, mLogPath.c_str(), "a+") == 0)
 	{
@@ -411,6 +424,7 @@ void RoomAcousticQT::enumDevices()
 
 void RoomAcousticQT::loadConfiguration(const std::string& xmlfilename)
 {
+	std::cout << "Loading from " << xmlfilename << std::endl;
 	initializeEnvironment();
 
 	// Creating internal structre and prepare for xml loading

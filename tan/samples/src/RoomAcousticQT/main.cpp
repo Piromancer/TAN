@@ -24,9 +24,12 @@
 
 #include "QTRoomAcousticConfig.h"
 #include <QtWidgets/QApplication>
+#include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
+	QCommandLineParser parser;
+	parser.addHelpOption();
 	QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
 
 	QApplication application(argc, argv);
@@ -35,7 +38,32 @@ int main(int argc, char *argv[])
 	application.setWindowIcon(QIcon(":/images/Resources/RoomAcousticsNew.png"));
 
 	RoomAcousticQTConfig configWindow;
-	configWindow.Init();
+	if (application.arguments().count() >= 2) {
+		QCommandLineOption configFile("configFile", QCoreApplication::translate("main", "Initialize config with <File>"),
+			QCoreApplication::translate("main", "File"));
+		QCommandLineOption metricsFile("metricsFile", QCoreApplication::translate("main", "Save all gathered metrics into <File>"),
+			QCoreApplication::translate("main", "File"));
+		QCommandLineOption playDuration("playDuration", QCoreApplication::translate("main", "Sets duration of simulation to <Time> in seconds"),
+			QCoreApplication::translate("main", "Time"));
+		QCommandLineOption outputFile("outputFile", QCoreApplication::translate("main", "Save RoomAcousticsQT output into <File>"),
+			QCoreApplication::translate("main", "File"));
+		parser.addOption(configFile);
+		parser.addOption(metricsFile);
+		parser.addOption(playDuration);
+		parser.addOption(outputFile);
+		parser.process(application);
+		std::cout
+			<< "Benchmarking mode initiated:" << std::endl
+			<< "Config file: " << parser.value(configFile).toStdString() << std::endl
+			<< "Output file: " << parser.value(outputFile).toStdString() << std::endl
+			<< "Play duration in seconds: " << parser.value(playDuration).toInt() << std::endl
+			<< "Metrics file: " << parser.value(metricsFile).toStdString() << std::endl;
+		configWindow.Init(true, parser.value(configFile).toStdString(), 
+			parser.value(metricsFile).toStdString(), parser.value(outputFile).toStdString(), parser.value(playDuration).toInt());
+}
+	else
+		configWindow.Init(false, "", "", "RoomAcousticsRun.wav", NULL);
+
 
 #ifdef USE_ASIO
 	long err = 0;
