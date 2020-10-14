@@ -36,7 +36,11 @@
 
 #include <iostream>
 #include <cstring>
-#include <windows.h>
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 
 #ifdef USE_ASIO
 #include "asiosys.h"
@@ -223,7 +227,7 @@ RoomAcousticQTConfig::~RoomAcousticQTConfig()
 #endif
 }
 
-void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std::string metricsFile, std::string outputFile)
+void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std::string metricsFile, std::string outputFile, int playDuration)
 {
 	m_RoomAcousticGraphic->clear();
 	m_RoomAcousticInstance.mOutputFileName = outputFile;
@@ -246,14 +250,18 @@ void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std
 	updateListnerGraphics();
 
 	if (consoleMode)
-		run_in_console();
+		run_in_console(playDuration);
 	else
 		show();
 }
 
-void RoomAcousticQTConfig::run_in_console() {
+void RoomAcousticQTConfig::run_in_console(int playDuration) {
 	on_PB_RunDemo_clicked();
-	Sleep(3000);
+#ifdef _WIN32
+	Sleep(playDuration * 1000);
+#else
+	usleep(playDuration * 1000);
+#endif
 	on_PB_RunDemo_clicked();
 	close();
 	std::exit(0);
