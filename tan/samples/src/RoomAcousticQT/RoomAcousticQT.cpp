@@ -135,8 +135,9 @@ bool RoomAcousticQT::start()
 		);
 	auto t2 = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-	std::cout << std::endl << std::endl << "Initialization duration: " << duration << std::endl << std::endl; 
+	
 	if (mMetricsFileName != "") {
+		std::cout << std::endl << std::endl << "Initialization duration: " << duration << std::endl << std::endl;
 		std::ofstream myfile;
 		myfile.open(mMetricsFileName);
 		myfile << "Initializtion: " << duration << std::endl;
@@ -424,7 +425,6 @@ void RoomAcousticQT::enumDevices()
 
 void RoomAcousticQT::loadConfiguration(const std::string& xmlfilename)
 {
-	std::cout << "Loading from " << xmlfilename << std::endl;
 	initializeEnvironment();
 
 	// Creating internal structre and prepare for xml loading

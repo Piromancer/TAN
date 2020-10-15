@@ -109,7 +109,7 @@ public:
 
         amf::TAN_CONVOLUTION_METHOD
                                 convMethod,
-		std::string outputFile,
+		std::string &			outputFile,
         const std::string &     playerType
         );
 

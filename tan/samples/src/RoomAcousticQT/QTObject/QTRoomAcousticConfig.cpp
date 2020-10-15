@@ -227,7 +227,8 @@ RoomAcousticQTConfig::~RoomAcousticQTConfig()
 #endif
 }
 
-void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std::string metricsFile, std::string outputFile, int playDuration)
+void RoomAcousticQTConfig::Init(bool consoleMode, const std::string & configFile, 
+	const std::string & metricsFile, const std::string & outputFile, size_t playDuration)
 {
 	m_RoomAcousticGraphic->clear();
 	m_RoomAcousticInstance.mOutputFileName = outputFile;
@@ -249,10 +250,14 @@ void RoomAcousticQTConfig::Init(boolean consoleMode, std::string configFile, std
 	updateAllSoundSourceGraphics();
 	updateListnerGraphics();
 
-	if (consoleMode)
+	if (consoleMode) 
+	{
 		run_in_console(playDuration);
+	}
 	else
+	{
 		show();
+	}
 }
 
 void RoomAcousticQTConfig::run_in_console(int playDuration) {
