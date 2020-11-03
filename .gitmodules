@@ -4,3 +4,6 @@
 [submodule "amfOpen"]
 	path = amfOpen
 	url = https://github.com/amfdev/AMF
+[submodule "tan/tests/TAN-UnitTests"]
+	path = tan/tests/TAN-UnitTests
+	url = https://github.com/luxteam/TAN-UnitTests.git
