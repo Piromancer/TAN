@@ -228,16 +228,18 @@ RoomAcousticQTConfig::~RoomAcousticQTConfig()
 }
 
 void RoomAcousticQTConfig::Init(bool consoleMode, const std::string & configFile, 
-	const std::string & metricsFile, const std::string & outputFile, size_t playDuration)
+	const std::string & metricsFile, const std::string & outputFile, size_t timeout)
 {
 	m_RoomAcousticGraphic->clear();
 	m_RoomAcousticInstance.mOutputFileName = outputFile;
 	if (consoleMode) {
 		m_RoomAcousticInstance.mConfigFileName = configFile;
 		m_RoomAcousticInstance.mMetricsFileName = metricsFile;
+		m_RoomAcousticInstance.consoleMode = true;
 	}
 	else {
 		m_RoomAcousticInstance.mMetricsFileName = "";
+		m_RoomAcousticInstance.consoleMode = false;
 	}
 	m_RoomAcousticInstance.loadConfiguration(m_RoomAcousticInstance.mConfigFileName);
 
@@ -252,7 +254,7 @@ void RoomAcousticQTConfig::Init(bool consoleMode, const std::string & configFile
 
 	if (consoleMode) 
 	{
-		run_in_console(playDuration);
+		run_in_console(timeout);
 	}
 	else
 	{
@@ -260,15 +262,16 @@ void RoomAcousticQTConfig::Init(bool consoleMode, const std::string & configFile
 	}
 }
 
-void RoomAcousticQTConfig::run_in_console(int playDuration) {
+void RoomAcousticQTConfig::run_in_console(int timeout) {
 	on_PB_RunDemo_clicked();
 #ifdef _WIN32
-	Sleep(playDuration * 1000);
+	Sleep(timeout * 1000);
 #else
-	usleep(playDuration * 1000);
+	usleep(timeout * 1000);
 #endif
 	on_PB_RunDemo_clicked();
 	close();
+	std::cout << "Console mode timeout";
 	std::exit(0);
 }
 

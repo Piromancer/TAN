@@ -23,6 +23,7 @@
 //
 
 #pragma once
+#define PERFORMANCE_SELECTION_SIZE 1000
 
 #include <cstdint>
 
@@ -109,7 +110,8 @@ public:
 
         amf::TAN_CONVOLUTION_METHOD
                                 convMethod,
-		std::string &			outputFile,
+		const std::string &     outputFile,
+		bool                    consoleMode,
         const std::string &     playerType
         );
 
@@ -158,6 +160,7 @@ protected:
 
 #endif
 
+	bool             mconsoleMode;
 	std::string      moutputFile;
 	std::string      mplayerType;
     std::unique_ptr<IWavPlayer> mPlayer; //todo: dynamic creation of choosen player
@@ -185,6 +188,11 @@ protected:
     bool mSrc1EnableMic = false;
     bool mSrc1TrackHeadPos = false;
     bool mSrc1MuteDirectPath = false;
+    
+	long firstCall = -1;
+	long* subsequentCalls = new long[PERFORMANCE_SELECTION_SIZE];
+	long subsequentCallsNumber = 0;
+	float averageCallDuration = 0;
 
     AllignedAllocator<float, 32>mResponseBufferStorage;
 	float *mResponseBuffer = nullptr;

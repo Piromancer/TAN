@@ -131,6 +131,7 @@ bool RoomAcousticQT::start()
 		m_eConvolutionMethod,
 
 		mOutputFileName,
+		consoleMode,
 		mPlayerName
 		);
 	auto t2 = std::chrono::high_resolution_clock::now();

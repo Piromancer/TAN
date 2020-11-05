@@ -41,20 +41,20 @@ int main(int argc, char *argv[])
 	if (application.arguments().count() >= 2) {
 		QCommandLineOption configFile("configFile", "Initialize config with <File>", "File");
 		QCommandLineOption metricsFile("metricsFile", "Save all gathered metrics into <File>", "File");
-		QCommandLineOption playDuration("playDuration", "Sets duration of simulation to <Time> in seconds", "Time");
+		QCommandLineOption timeout("timeout", "Sets the duration of test to <Time> in seconds", "Time");
 		QCommandLineOption outputFile("outputFile", "Save RoomAcousticsQT output into <File>", "File");
 		parser.addOption(configFile);
 		parser.addOption(metricsFile);
-		parser.addOption(playDuration);
+		parser.addOption(timeout);
 		parser.addOption(outputFile);
 		parser.process(application);
 		configWindow.Init(true, parser.value(configFile).toStdString(), 
-			parser.value(metricsFile).toStdString(), parser.value(outputFile).toStdString(), parser.value(playDuration).toInt());
+			parser.value(metricsFile).toStdString(), parser.value(outputFile).toStdString(), parser.value(timeout).toInt());
 		std::cout
 			<< "Console mode initiated:" << std::endl
 			<< "Config file: " << parser.value(configFile).toStdString() << std::endl
 			<< "Output file: " << parser.value(outputFile).toStdString() << std::endl
-			<< "Play duration in seconds: " << parser.value(playDuration).toInt() << std::endl
+			<< "Play duration in seconds: " << parser.value(timeout).toInt() << std::endl
 			<< "Metrics file: " << parser.value(metricsFile).toStdString() << std::endl;
 }
 	else

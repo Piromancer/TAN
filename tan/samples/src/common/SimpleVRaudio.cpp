@@ -348,10 +348,12 @@ int Audio3D::Init
 	convMethod,
 
 	const std::string &     outputFile,
+	bool                    consoleMode,
 	const std::string &     playerType
 )
 {
 	moutputFile = outputFile;
+	mconsoleMode = consoleMode;
 
 	if (useGPU_ConvQueue && !useGPU_Conv)
 	{
@@ -1060,6 +1062,7 @@ bool Audio3D::Stop()
 
 int Audio3D::Process(int16_t *pOut, int16_t *pChan[MAX_SOURCES], uint32_t sampleCountBytes)
 {
+	auto t1 = std::chrono::high_resolution_clock::now();
     uint32_t sampleCount = sampleCountBytes / (sizeof(int16_t) * STEREO_CHANNELS_COUNT);
 
     // Read from the files
@@ -1200,6 +1203,24 @@ int Audio3D::Process(int16_t *pOut, int16_t *pChan[MAX_SOURCES], uint32_t sample
     ret = m_spConverter->Convert(outputFloatBufs[1], 1, sampleCount, pOut + 1, 2, 1.f);
     RETURN_IF_FALSE(ret == AMF_OK || ret == AMF_TAN_CLIPPING_WAS_REQUIRED);
 #endif
+	auto t2 = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+	if (mconsoleMode) {
+		if (firstCall == -1) {
+			firstCall = duration;
+		}
+		else if (subsequentCallsNumber < PERFORMANCE_SELECTION_SIZE) {
+			subsequentCalls[subsequentCallsNumber] = duration;
+			subsequentCallsNumber++;
+			averageCallDuration = 0;
+			for (int i = 0; i < subsequentCallsNumber; i++) {
+				averageCallDuration += subsequentCalls[i] / subsequentCallsNumber;
+			}
+			if (subsequentCallsNumber == PERFORMANCE_SELECTION_SIZE) {
+				std::cout << std::endl << std::endl << "Average call duration was: " << averageCallDuration << std::endl << std::endl;
+			}
+		}
+	}
     return 0;
 }
 

@@ -135,6 +135,7 @@ public:
 	std::string mConfigFileName;
 	std::string mMetricsFileName;
 	std::string mOutputFileName;
+	bool consoleMode;
 
 	std::string mWavFileNames[MAX_SOURCES];
 	char*  m_cpWavFileNames[MAX_SOURCES];
